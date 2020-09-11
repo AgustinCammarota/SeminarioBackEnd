@@ -144,7 +144,7 @@ public class ClienteController {
     }
 
     private ResponseEntity<?> devolverError(DataAccessException e, String mensaje) {
-        String mensajeError = e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage());
+        String mensajeError = e.getMostSpecificCause().getMessage();
         map.put("mensaje", mensaje);
         map.put("error", mensajeError);
         logger.error(mensajeError);
