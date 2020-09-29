@@ -23,7 +23,7 @@ public class Cliente implements Serializable {
     private String email;
 
     @NotNull(message = "es requerido")
-    @Size(min = 8, max = 9, message = "no tiene un formato valido")
+    @Size(min = 7, max = 8, message = "no tiene un formato valido")
     @Column(unique = true)
     private String dni;
 
