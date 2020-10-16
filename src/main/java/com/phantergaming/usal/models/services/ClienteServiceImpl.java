@@ -28,7 +28,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Page<Cliente> getClientesPage(Pageable page) {
-        return repository.findAll(page);
+        return repository.findAllByOrderByIdDesc(page);
     }
 
     @Override
@@ -44,5 +44,10 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public void deleteCliente(Long idCliente) {
         repository.deleteById(idCliente);
+    }
+
+    @Override
+    public void deleteClientes(Iterable<Cliente> clientes) {
+        repository.deleteAll(clientes);
     }
 }

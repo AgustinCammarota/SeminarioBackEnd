@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 
 @Entity
@@ -85,5 +86,23 @@ public class Cliente implements Serializable {
 
     public void setFechaCreate(Date fechaCreate) {
         this.fechaCreate = fechaCreate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cliente)) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(id, cliente.id) &&
+                Objects.equals(nombre, cliente.nombre) &&
+                Objects.equals(email, cliente.email) &&
+                Objects.equals(dni, cliente.dni) &&
+                Objects.equals(telefono, cliente.telefono) &&
+                Objects.equals(fechaCreate, cliente.fechaCreate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre, email, dni, telefono, fechaCreate);
     }
 }

@@ -42,9 +42,8 @@ public class ClienteController {
         try {
             return ResponseEntity.ok().body(service.getClientesPage(page));
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el get en la base de datos");
+            return this.devolverError(e, "Error al buscar a los Clientes");
         }
-
     }
 
     @GetMapping()
@@ -53,7 +52,7 @@ public class ClienteController {
         try {
             return ResponseEntity.ok().body(service.getClientes());
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el get en la base de datos");
+            return this.devolverError(e, "Error al buscar a los Clientes");
         }
     }
 
@@ -63,7 +62,7 @@ public class ClienteController {
         try {
             return ResponseEntity.ok().body(service.findAllByNombre(nombre));
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el get en la base de datos");
+            return this.devolverError(e, "Error al buscar a los Clientes");
         }
     }
 
@@ -73,7 +72,7 @@ public class ClienteController {
         try {
             clienteOptional = service.getCliente(idCliente);
         } catch (DataAccessException e) {
-           return this.devolverError(e, "Error al realizar el get en la base de datos");
+           return this.devolverError(e, "Error al buscar al Cliente");
         }
 
         if (!clienteOptional.isPresent()) {
@@ -93,7 +92,7 @@ public class ClienteController {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveCliente(cliente));
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el insert en la base de datos");
+            return this.devolverError(e, "Error al guardar al Cliente");
         }
     }
 
@@ -103,7 +102,7 @@ public class ClienteController {
         try {
             clienteOptional = service.getCliente(idCliente);
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el get en la base de datos");
+            return this.devolverError(e, "Error al buscar al Cliente");
         }
 
         if (!clienteOptional.isPresent()) {
@@ -123,7 +122,7 @@ public class ClienteController {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveCliente(clienteActual));
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el update en la base de datos");
+            return this.devolverError(e, "Error al actualizar al Cliente");
         }
     }
 
@@ -133,14 +132,25 @@ public class ClienteController {
         try {
             service.deleteCliente(idCliente);
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al realizar el delete en la base de datos");
+            return this.devolverError(e, "Error al eliminar al Cliente");
         }
         return ResponseEntity.noContent().build();
     }
 
     private ResponseEntity<?> validarCampos(BindingResult bindingResult) {
-        bindingResult.getFieldErrors().forEach( error -> map.put(error.getField(), "El campo: " + error.getField() + " " + error.getDefaultMessage()));
+        bindingResult.getFieldErrors().forEach( error -> map.put("error", "El campo: " + error.getField() + " " + error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(map);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<?> deleteProductos(@RequestBody Iterable<Cliente> clientes) {
+
+        try {
+            service.deleteClientes(clientes);
+        } catch (DataAccessException e) {
+            return this.devolverError(e, "Error al eliminar los Clientes");
+        }
+        return ResponseEntity.noContent().build();
     }
 
     private ResponseEntity<?> devolverError(DataAccessException e, String mensaje) {

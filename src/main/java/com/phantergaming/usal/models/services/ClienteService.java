@@ -20,4 +20,6 @@ public interface ClienteService {
     Optional<Cliente> getCliente(Long idCliente);
 
     void deleteCliente(Long idCliente);
+
+    void deleteClientes(Iterable<Cliente> clientes);
 }
