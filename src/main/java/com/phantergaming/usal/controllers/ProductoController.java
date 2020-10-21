@@ -130,6 +130,36 @@ public class ProductoController {
         }
     }
 
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam Long idProducto) {
+        try {
+            productoOptional = service.getProducto(idProducto);
+        } catch (DataAccessException e) {
+            return this.devolverError(e, "Error al buscar al Producto");
+        }
+
+        if (!productoOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            if (!archivo.isEmpty()) {
+                productoActual = productoOptional.get();
+                productoActual.setFoto(archivo.getBytes());
+            }
+        } catch (IOException e) {
+            map.put("mensaje", "Error al subir la imagen del producto");
+            map.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
+        }
+
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveProducto(productoActual));
+        } catch (DataAccessException e) {
+            return this.devolverError(e, "Error al guardar al Producto");
+        }
+    }
+
     @PutMapping("/{idProducto}")
     public ResponseEntity<?> updateProducto(@Valid Producto producto, BindingResult bindingResult, @PathVariable Long idProducto, @RequestParam MultipartFile archivo) {
 

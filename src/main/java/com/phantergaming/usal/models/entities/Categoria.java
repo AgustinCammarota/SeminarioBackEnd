@@ -8,6 +8,13 @@ import java.util.Objects;
 @Table(name = "categorias")
 public class Categoria implements Serializable {
 
+    public Categoria(Long id, String categoria) {
+        this.id = id;
+        this.categoria = categoria;
+    }
+
+    public Categoria() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

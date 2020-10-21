@@ -22,11 +22,12 @@ public class Producto implements Serializable {
     private String nombre;
 
     @NotNull(message = "es requerido")
-    private Double precio;
+    private String precio;
 
     @NotNull(message = "es requerido")
     private Long cantidad;
 
+    @NotNull(message = "es requerido")
     private String descripcion;
 
     private Boolean estado;
@@ -76,11 +77,11 @@ public class Producto implements Serializable {
         this.nombre = nombre;
     }
 
-    public Double getPrecio() {
+    public String getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(String precio) {
         this.precio = precio;
     }
 
