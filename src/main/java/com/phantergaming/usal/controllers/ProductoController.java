@@ -107,20 +107,10 @@ public class ProductoController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> saveProducto(@Valid Producto producto, BindingResult bindingResult, @RequestParam("archivo") MultipartFile archivo) {
+    public ResponseEntity<?> saveProducto(@Valid @RequestBody Producto producto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return validarCampos(bindingResult);
-        }
-
-        try {
-            if (!archivo.isEmpty()) {
-                producto.setFoto(archivo.getBytes());
-            }
-        } catch (IOException e) {
-            map.put("mensaje", "Error al subir la imagen del producto");
-            map.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
         }
 
         try {
@@ -131,7 +121,7 @@ public class ProductoController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam Long idProducto) {
+    public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("idProducto") Long idProducto) {
         try {
             productoOptional = service.getProducto(idProducto);
         } catch (DataAccessException e) {
@@ -161,7 +151,7 @@ public class ProductoController {
     }
 
     @PutMapping("/{idProducto}")
-    public ResponseEntity<?> updateProducto(@Valid Producto producto, BindingResult bindingResult, @PathVariable Long idProducto, @RequestParam MultipartFile archivo) {
+    public ResponseEntity<?> updateProducto(@Valid @RequestBody Producto producto, BindingResult bindingResult, @PathVariable Long idProducto) {
 
         try {
             productoOptional = service.getProducto(idProducto);
@@ -186,19 +176,9 @@ public class ProductoController {
         productoActual.setPrecio(producto.getPrecio());
 
         try {
-            if (!archivo.isEmpty()) {
-                productoActual.setFoto(archivo.getBytes());
-            }
-        } catch (IOException e) {
-            map.put("mensaje", "Error al subir la imagen del producto");
-            map.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(map);
-        }
-
-        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveProducto(producto));
         } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al actualizar al Cliente");
+            return this.devolverError(e, "Error al actualizar al Producto");
         }
     }
 
