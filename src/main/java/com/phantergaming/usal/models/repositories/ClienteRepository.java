@@ -1,6 +1,5 @@
 package com.phantergaming.usal.models.repositories;
 
-
 import com.phantergaming.usal.models.entities.Cliente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

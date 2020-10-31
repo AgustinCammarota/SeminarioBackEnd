@@ -8,11 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
-    @Query("select p from Producto p where p.nombre like %?1%")
+    @Query("select p from Producto p where p.nombre like %?1% or p.categoria.categoria like %?1%")
     Iterable<Producto> findAllByNombre(String nombre);
-
-    @Query("select p from Producto p where p.categoria.categoria = ?1")
-    Iterable<Producto> findAllByCategoria(String categoria);
 
     Page<Producto> findAllByOrderByIdDesc(Pageable pageable);
 }

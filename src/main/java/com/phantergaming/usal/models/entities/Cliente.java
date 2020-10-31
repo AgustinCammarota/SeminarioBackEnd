@@ -1,7 +1,8 @@
 package com.phantergaming.usal.models.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,19 +17,20 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     private String nombre;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     @Column(unique = true)
+    @Email
     private String email;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     @Size(min = 7, max = 8, message = "no tiene un formato valido")
     @Column(unique = true)
     private String dni;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     private String telefono;
 
     @Column(name = "fecha_create")

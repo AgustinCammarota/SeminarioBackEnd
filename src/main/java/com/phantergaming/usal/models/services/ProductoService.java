@@ -13,8 +13,6 @@ public interface ProductoService {
 
     Iterable<Producto> findAllByNombre(String nombre);
 
-    Iterable<Producto> findAllByCategoria(String categoria);
-
     Iterable<Categoria> getCategorias();
 
     Page<Producto> getProductosPage(Pageable page);

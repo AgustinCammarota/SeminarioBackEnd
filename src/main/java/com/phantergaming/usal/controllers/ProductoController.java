@@ -39,7 +39,6 @@ public class ProductoController {
     Optional<Producto> productoOptional = Optional.empty();
 
 
-
     @GetMapping("/page")
     public ResponseEntity<?> getProductosPagina(Pageable page) {
 
@@ -65,16 +64,6 @@ public class ProductoController {
 
         try {
             return ResponseEntity.ok().body(service.getCategorias());
-        } catch (DataAccessException e) {
-            return this.devolverError(e, "Error al buscar a las Categorias");
-        }
-    }
-
-    @GetMapping("/categorias/{categoria}")
-    public ResponseEntity<?> getCategorias(@PathVariable String categoria) {
-
-        try {
-            return ResponseEntity.ok().body(service.findAllByCategoria(categoria));
         } catch (DataAccessException e) {
             return this.devolverError(e, "Error al buscar a las Categorias");
         }
@@ -121,7 +110,9 @@ public class ProductoController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("idProducto") Long idProducto) {
+    public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo,
+                                    @RequestParam("idProducto") Long idProducto,
+                                    @RequestParam("nombreFoto") String nombreFoto) {
         try {
             productoOptional = service.getProducto(idProducto);
         } catch (DataAccessException e) {
@@ -136,6 +127,7 @@ public class ProductoController {
             if (!archivo.isEmpty()) {
                 productoActual = productoOptional.get();
                 productoActual.setFoto(archivo.getBytes());
+                productoActual.setNombreFoto(nombreFoto);
             }
         } catch (IOException e) {
             map.put("mensaje", "Error al subir la imagen del producto");
@@ -172,11 +164,12 @@ public class ProductoController {
         productoActual.setCantidad(producto.getCantidad());
         productoActual.setCategoria(producto.getCategoria());
         productoActual.setDescripcion(producto.getDescripcion());
-        productoActual.setEstado(producto.getEstado());
+        productoActual.setFechaCreate(producto.getFechaCreate());
+        productoActual.setNombreFoto(producto.getNombreFoto());
         productoActual.setPrecio(producto.getPrecio());
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveProducto(producto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveProducto(productoActual));
         } catch (DataAccessException e) {
             return this.devolverError(e, "Error al actualizar al Producto");
         }
@@ -218,7 +211,7 @@ public class ProductoController {
     }
 
     private ResponseEntity<?> validarCampos(BindingResult bindingResult) {
-        bindingResult.getFieldErrors().forEach( error -> map.put("error", "El campo: " + error.getField() + " " + error.getDefaultMessage()));
+        bindingResult.getFieldErrors().forEach(error -> map.put("error", "El campo: " + error.getField() + " " + error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(map);
     }
 

@@ -2,8 +2,8 @@ package com.phantergaming.usal.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -18,23 +18,24 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     private String nombre;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     private String precio;
 
     @NotNull(message = "es requerido")
     private Long cantidad;
 
-    @NotNull(message = "es requerido")
+    @NotEmpty(message = "es requerido")
     private String descripcion;
 
-    private Boolean estado;
+    @Column(name = "nombre_foto")
+    private String nombreFoto;
 
     @Lob
     @JsonIgnore
-    private byte[] archivo;
+    private byte[] foto;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -44,21 +45,17 @@ public class Producto implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaCreate;
 
-    @PrePersist
-    private void prePersistFecha() {
-        this.fechaCreate = new Date();
-    }
 
     public  Integer getarchivoHashCode() {
-        return (this.archivo != null) ? this.archivo.hashCode(): null;
+        return (this.foto != null) ? this.foto.hashCode(): null;
     }
 
     public byte[] getFoto() {
-        return archivo;
+        return foto;
     }
 
-    public void setFoto(byte[] archivo) {
-        this.archivo = archivo;
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
     }
 
     public Long getId() {
@@ -81,6 +78,14 @@ public class Producto implements Serializable {
         return precio;
     }
 
+    public String getNombreFoto() {
+        return nombreFoto;
+    }
+
+    public void setNombreFoto(String nombreFoto) {
+        this.nombreFoto = nombreFoto;
+    }
+
     public void setPrecio(String precio) {
         this.precio = precio;
     }
@@ -99,14 +104,6 @@ public class Producto implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
     }
 
     public Categoria getCategoria() {
@@ -135,15 +132,16 @@ public class Producto implements Serializable {
                 Objects.equals(precio, producto.precio) &&
                 Objects.equals(cantidad, producto.cantidad) &&
                 Objects.equals(descripcion, producto.descripcion) &&
-                Objects.equals(estado, producto.estado) &&
-                Arrays.equals(archivo, producto.archivo) &&
+                Objects.equals(nombreFoto, producto.nombreFoto) &&
+                Arrays.equals(foto, producto.foto) &&
+                Objects.equals(categoria, producto.categoria) &&
                 Objects.equals(fechaCreate, producto.fechaCreate);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, nombre, precio, cantidad, descripcion, estado, fechaCreate);
-        result = 31 * result + Arrays.hashCode(archivo);
+        int result = Objects.hash(id, nombre, precio, cantidad, descripcion, nombreFoto, categoria, fechaCreate);
+        result = 31 * result + Arrays.hashCode(foto);
         return result;
     }
 }

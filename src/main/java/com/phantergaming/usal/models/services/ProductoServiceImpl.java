@@ -31,11 +31,6 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public Iterable<Producto> findAllByCategoria(String categoria) {
-        return productoRepository.findAllByCategoria(categoria);
-    }
-
-    @Override
     public Iterable<Categoria> getCategorias() {
         return categoriaRepository.findAll();
     }
