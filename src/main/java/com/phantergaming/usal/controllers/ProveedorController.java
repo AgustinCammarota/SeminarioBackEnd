@@ -54,7 +54,7 @@ public class ProveedorController {
         }
     }
 
-    @GetMapping("/filtrar/{nombre}")
+    @GetMapping("/filtrar/{termino}")
     public ResponseEntity<?> getProveedoresPorNombre(@PathVariable String termino) {
 
         try {
@@ -116,7 +116,7 @@ public class ProveedorController {
         proveedorActual.setDireccion(proveedor.getDireccion());
         proveedorActual.setEmail(proveedor.getEmail());
         proveedorActual.setTelefono(proveedor.getTelefono());
-        proveedorActual.setProducto(proveedor.getProducto());
+        proveedorActual.setProductos(proveedor.getProductos());
 
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(this.service.saveProveedor(proveedorActual));

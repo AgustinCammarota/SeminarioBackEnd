@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -24,8 +25,8 @@ public class Proveedor implements Serializable {
     private String direccion;
 
     @NotEmpty
-    @Email
     @Column(unique = true)
+    @Email
     private String email;
 
     @NotEmpty
@@ -35,9 +36,13 @@ public class Proveedor implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaCreate;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
-    private List<Producto> producto;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, allowSetters = true)
+    private List<Producto> productos;
+
+    public Proveedor() {
+        this.productos = new ArrayList<>();
+    }
 
     @PrePersist()
     private void prePersistFecha() {
@@ -92,12 +97,12 @@ public class Proveedor implements Serializable {
         this.fechaCreate = fechaCreate;
     }
 
-    public List<Producto> getProducto() {
-        return producto;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setProducto(List<Producto> producto) {
-        this.producto = producto;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 
     @Override
@@ -111,11 +116,11 @@ public class Proveedor implements Serializable {
                 Objects.equals(email, proveedor.email) &&
                 Objects.equals(telefono, proveedor.telefono) &&
                 Objects.equals(fechaCreate, proveedor.fechaCreate) &&
-                Objects.equals(producto, proveedor.producto);
+                Objects.equals(productos, proveedor.productos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, direccion, email, telefono, fechaCreate, producto);
+        return Objects.hash(id, nombre, direccion, email, telefono, fechaCreate, productos);
     }
 }
