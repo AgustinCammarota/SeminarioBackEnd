@@ -1,11 +1,14 @@
 package com.phantergaming.usal.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -36,6 +39,10 @@ public class Cliente implements Serializable {
     @Column(name = "fecha_create")
     @Temporal(TemporalType.DATE)
     private Date fechaCreate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"cliente", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+    private List<Pedido> pedidos;
 
     @PrePersist
     private void prePersistFecha() {
@@ -90,6 +97,14 @@ public class Cliente implements Serializable {
         this.fechaCreate = fechaCreate;
     }
 
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,11 +115,12 @@ public class Cliente implements Serializable {
                 Objects.equals(email, cliente.email) &&
                 Objects.equals(dni, cliente.dni) &&
                 Objects.equals(telefono, cliente.telefono) &&
-                Objects.equals(fechaCreate, cliente.fechaCreate);
+                Objects.equals(fechaCreate, cliente.fechaCreate) &&
+                Objects.equals(pedidos, cliente.pedidos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, email, dni, telefono, fechaCreate);
+        return Objects.hash(id, nombre, email, dni, telefono, fechaCreate, pedidos);
     }
 }

@@ -137,11 +137,6 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<?> validarCampos(BindingResult bindingResult) {
-        bindingResult.getFieldErrors().forEach( error -> map.put("error", "El campo: " + error.getField() + " " + error.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(map);
-    }
-
     @DeleteMapping()
     public ResponseEntity<?> deleteProductos(@RequestBody Iterable<Cliente> clientes) {
 
@@ -151,6 +146,11 @@ public class ClienteController {
             return this.devolverError(e, "Error al eliminar los Clientes");
         }
         return ResponseEntity.noContent().build();
+    }
+
+    private ResponseEntity<?> validarCampos(BindingResult bindingResult) {
+        bindingResult.getFieldErrors().forEach( error -> map.put("error", "El campo: " + error.getField() + " " + error.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(map);
     }
 
     private ResponseEntity<?> devolverError(DataAccessException e, String mensaje) {
