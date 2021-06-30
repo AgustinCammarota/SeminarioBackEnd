@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class ProveedorController {
     Optional<Proveedor> proveedorOptional = Optional.empty();
 
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/page")
     public ResponseEntity<?> getProveedoresPagina(Pageable page) {
 
@@ -44,6 +46,7 @@ public class ProveedorController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping()
     public ResponseEntity<?> getProveedores() {
 
@@ -54,6 +57,7 @@ public class ProveedorController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/filtrar/{termino}")
     public ResponseEntity<?> getProveedoresPorNombre(@PathVariable String termino) {
 
@@ -64,6 +68,7 @@ public class ProveedorController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/{idProveedor}")
     public ResponseEntity<?> getProveedor(@PathVariable Long idProveedor) {
 
@@ -80,6 +85,7 @@ public class ProveedorController {
         return ResponseEntity.ok().body(proveedorOptional.get());
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping()
     public ResponseEntity<?> saveProveedor(@Valid @RequestBody Proveedor proveedor, BindingResult bindingResult) {
 
@@ -94,6 +100,7 @@ public class ProveedorController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/{idProveedor}")
     public ResponseEntity<?> updateProveedor(@Valid @RequestBody Proveedor proveedor, BindingResult bindingResult, @PathVariable Long idProveedor) {
 
@@ -125,6 +132,7 @@ public class ProveedorController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{idProveedor}")
     public ResponseEntity<?> deleteProveedor(@PathVariable Long idProveedor) {
 
@@ -136,6 +144,7 @@ public class ProveedorController {
         return ResponseEntity.noContent().build();
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping()
     public ResponseEntity<?> deleteProveedor(@RequestBody Iterable<Proveedor> proveedores) {
 

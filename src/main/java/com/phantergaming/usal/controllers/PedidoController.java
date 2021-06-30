@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class PedidoController {
 
     private final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/page")
     public ResponseEntity<?> getPedidosPagina(Pageable page) {
 
@@ -38,6 +40,7 @@ public class PedidoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/direccion/provincias")
     public ResponseEntity<?> getProvincias() {
 
@@ -48,6 +51,7 @@ public class PedidoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/filtrar/{termino}")
     public ResponseEntity<?> getPedidosPorTermino(@PathVariable String termino) {
 
@@ -58,6 +62,7 @@ public class PedidoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping()
     public ResponseEntity<?> savePedido(@Valid @RequestBody Pedido pedido, BindingResult bindingResult) {
 
@@ -72,6 +77,7 @@ public class PedidoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{idPedido}")
     public ResponseEntity<?> deleteCliente(@PathVariable Long idPedido) {
 

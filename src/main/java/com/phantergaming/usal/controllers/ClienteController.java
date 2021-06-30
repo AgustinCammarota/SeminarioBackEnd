@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class ClienteController {
     Optional<Cliente> clienteOptional = Optional.empty();
 
 
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/page")
     public ResponseEntity<?> getClientesPagina(Pageable page) {
 
@@ -46,6 +47,7 @@ public class ClienteController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping()
     public ResponseEntity<?> getClientes() {
 
@@ -56,6 +58,7 @@ public class ClienteController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/filtrar/{nombre}")
     public ResponseEntity<?> getClientesPorNombre(@PathVariable String nombre) {
 
@@ -66,6 +69,7 @@ public class ClienteController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/{idCliente}")
     public ResponseEntity<?> getCliente(@PathVariable Long idCliente) {
 
@@ -82,6 +86,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(clienteOptional.get());
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping()
     public ResponseEntity<?> saveCliente(@Valid @RequestBody Cliente cliente, BindingResult bindingResult) {
 
@@ -96,6 +101,7 @@ public class ClienteController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/{idCliente}")
     public ResponseEntity<?> updateCliente(@Valid @RequestBody Cliente cliente, BindingResult bindingResult, @PathVariable Long idCliente) {
 
@@ -126,6 +132,7 @@ public class ClienteController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{idCliente}")
     public ResponseEntity<?> deleteCliente(@PathVariable Long idCliente) {
 
@@ -137,6 +144,7 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping()
     public ResponseEntity<?> deleteProductos(@RequestBody Iterable<Cliente> clientes) {
 

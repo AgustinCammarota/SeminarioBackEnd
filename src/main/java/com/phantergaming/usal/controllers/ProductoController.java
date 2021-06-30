@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,7 @@ public class ProductoController {
     Optional<Producto> productoOptional = Optional.empty();
 
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/page")
     public ResponseEntity<?> getProductosPagina(Pageable page) {
 
@@ -49,6 +51,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping()
     public ResponseEntity<?> getProductos() {
 
@@ -59,6 +62,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/categorias")
     public ResponseEntity<?> getCategorias() {
 
@@ -69,6 +73,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/filtrar/{nombre}")
     public ResponseEntity<?> getProductosPorNombre(@PathVariable String nombre) {
 
@@ -79,6 +84,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/{idProducto}")
     public ResponseEntity<?> getProducto(@PathVariable Long idProducto) {
 
@@ -95,6 +101,7 @@ public class ProductoController {
         return ResponseEntity.ok().body(productoOptional.get());
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping()
     public ResponseEntity<?> saveProducto(@Valid @RequestBody Producto producto, BindingResult bindingResult) {
 
@@ -109,6 +116,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo,
                                     @RequestParam("idProducto") Long idProducto,
@@ -142,6 +150,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/{idProducto}")
     public ResponseEntity<?> updateProducto(@Valid @RequestBody Producto producto, BindingResult bindingResult, @PathVariable Long idProducto) {
 
@@ -175,6 +184,7 @@ public class ProductoController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     @GetMapping("/uploads/img/{idProducto}")
     public ResponseEntity<?> verFoto(@PathVariable Long idProducto) {
         productoOptional = service.getProducto(idProducto);
@@ -188,6 +198,7 @@ public class ProductoController {
                 .contentType(MediaType.IMAGE_JPEG).body(imagen);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{idProducto}")
     public ResponseEntity<?> deleteProducto(@PathVariable Long idProducto) {
 
@@ -199,6 +210,7 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping()
     public ResponseEntity<?> deleteProductos(@RequestBody Iterable<Producto> productos) {
 
